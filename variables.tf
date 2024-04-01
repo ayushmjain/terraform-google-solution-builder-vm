@@ -37,7 +37,7 @@ variable "vm_image" {
 
 variable "network_name" {
   type = string
-  default = ""
+  default = "default"
   description = "VPC network name where the GCE VMs are created"
 }
 
