@@ -33,6 +33,7 @@ module "instance_template" {
   source  = "terraform-google-modules/vm/google///modules/instance_template"
   version = "8.0.1"
 
+  project_id = var.project_id
   name_prefix      = "${var.managed_instance_group_name}-template-"
   source_image     = var.vm_image
   network = var.network_name
