@@ -31,13 +31,13 @@ variable "managed_instance_group_name" {
 
 variable "vm_image" {
   description = "The image from which to initialize the VM disk"
-  default = null
+  default = ""
   type = string
 }
 
 variable "network_name" {
   type = string
-  default = null
+  default = ""
   description = "VPC network name where the GCE VMs are created"
 }
 

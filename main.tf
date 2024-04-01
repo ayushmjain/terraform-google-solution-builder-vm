@@ -54,10 +54,10 @@ module "mig" {
   region                    = var.region
   distribution_policy_zones = data.google_compute_zones.available.names
   autoscaling_enabled       = true
-  named_ports = [
+  named_ports = var.load_balancer_port != null ? [
     {
       name = local.load_balancer_port_name
       port = var.load_balancer_port
     },
-  ]
+  ] : []
 }
