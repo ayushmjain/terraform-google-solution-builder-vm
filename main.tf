@@ -18,7 +18,7 @@ locals {
   load_balancer_port_name = var.load_balancer_port != null ? "load-balancer-port" : null
 
   # Construct the script to set environment variables
-  env_script = join("\n", [for k, v in var.env_variables : "export ${k}='${v}'"])
+  env_script = join("\n", [for k, v in var.env_variables : "echo \"export ${k}='${v}'\" >> /etc/profile"])
 
   # Combine the environment variables script with the user's script
   combined_startup_script = "${local.env_script}\n\n${var.startup_script}"
