@@ -16,7 +16,7 @@
 
 module "solution_builder_vm" {
   source = "../.."
-
   project_id  = var.project_id
-  bucket_name = var.bucket_name
+  region = var.region
+  managed_instance_group_name = var.managed_instance_group_name
 }

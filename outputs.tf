@@ -23,3 +23,9 @@ output "managed_instance_group" {
   description = "Managed instance group"
   value = module.mig
 }
+
+output "module_dependency" {
+  value = {}
+  depends_on = [module.instance_template, module.mig]
+  description = "Dependency variable that can be used by other modules to depend on this module"
+}

@@ -7,14 +7,15 @@ This example illustrates how to use the `solution-builder-vm` module.
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| bucket\_name | The name of the bucket to create. | `string` | n/a | yes |
-| project\_id | The ID of the project in which to provision resources. | `string` | n/a | yes |
+| managed\_instance\_group\_name | Name of the managed instance group | `string` | n/a | yes |
+| project\_id | The project ID to deploy the GCE VMs to | `string` | n/a | yes |
+| region | The region where the GCE VMs should be deployed | `string` | n/a | yes |
 
 ## Outputs
 
 | Name | Description |
 |------|-------------|
-| bucket\_name | The name of the bucket. |
+| managed\_instance\_group | Managed instance group |
 
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 

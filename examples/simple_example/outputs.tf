@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-output "bucket_name" {
-  description = "The name of the bucket."
-  value       = module.solution_builder_vm.bucket_name
+output "managed_instance_group" {
+  description = "Managed instance group"
+  value       = module.solution_builder_vm.managed_instance_group
 }

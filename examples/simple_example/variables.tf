@@ -15,11 +15,16 @@
  */
 
 variable "project_id" {
-  description = "The ID of the project in which to provision resources."
+  description = "The project ID to deploy the GCE VMs to"
   type        = string
 }
 
-variable "bucket_name" {
-  description = "The name of the bucket to create."
-  type        = string
+variable "region" {
+  description = "The region where the GCE VMs should be deployed"
+  type = string
+}
+
+variable "managed_instance_group_name" {
+  description = "Name of the managed instance group"
+  type = string
 }
