@@ -1,0 +1,115 @@
+# Copyright 2024 Google LLC
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+apiVersion: blueprints.cloud.google.com/v1alpha1
+kind: BlueprintMetadata
+metadata:
+  name: terraform-google-solution-builder-vm
+  annotations:
+    config.kubernetes.io/local-config: "true"
+spec:
+  info:
+    title: GCE VMs
+    source:
+      repo: https://github.com/ayushmjain/terraform-google-solution-builder-vm.git
+      sourceType: git
+    version: 0.0.1
+    actuationTool:
+      flavor: Terraform
+      version: ">= 0.13"
+    description:
+      tagline: Google Compute Engine (GCE) VMs offer scalable, high-performance virtual machines that run on Google's advanced infrastructure, enabling you to deploy and scale applications globally with ease.
+      detailed: This composition unit creates a GCE VM instance template and a regional managed instance group.
+      preDeploy: To deploy this blueprint you must have an active billing account and billing permissions.
+    icon: assets/icon.png
+  content:
+    documentation:
+    - title: Compute Engine
+      url: https://cloud.google.com/compute/docs/instances
+    examples:
+    - name: simple_example
+      location: examples/simple_example
+  interfaces:
+    variables:
+    - name: env_variables
+      description: Environment variables for GCE VMs
+      varType: map(string)
+      defaultValue: {}
+      userInputVariable: false
+      connections:
+      - compositionUnitID: terraform-google-solution-builder-cloud-sql
+        type: map_merge
+        output: env_variables
+      - compositionUnitID: terraform-google-solution-builder-redis
+        type: map_merge
+        output: env_variables
+    - name: load_balancer_port
+      description: Port for load balancer to connect to the VM instances
+      varType: string
+      userInputVariable: true
+    - name: managed_instance_group_name
+      description: Name of the managed instance group
+      varType: string
+      required: true
+      userInputVariable: true
+    - name: network_name
+      description: VPC network name where the GCE VMs are created
+      varType: string
+      defaultValue: default
+      userInputVariable: true
+      connections:
+      - compositionUnitID: terraform-google-solution-builder-vpc-network
+        type: direct
+        output: network_name
+    - name: project_id
+      description: The project ID to deploy the GCE VMs to
+      varType: string
+      required: true
+      userInputVariable: true
+    - name: region
+      description: The region where the GCE VMs should be deployed
+      varType: string
+      required: true
+      userInputVariable: true
+    - name: service_account_email
+      description: Email of the service account that should be attached to the GCE VMs
+      varType: string
+      userInputVariable: true
+    - name: startup_script
+      description: Startup script for GCE VMs
+      varType: string
+      defaultValue: ""
+      userInputVariable: true
+    - name: vm_image
+      description: The image from which to initialize the VM disk
+      varType: string
+      defaultValue: ""
+      userInputVariable: true
+    outputs:
+    - name: load_balancer_port_name
+      description: Port name for load balancer to connect to the VM instances
+      solutionOutputVariable: false
+    - name: managed_instance_group
+      description: Managed instance group
+      solutionOutputVariable: false
+    - name: module_dependency
+      description: Dependency variable that can be used by other modules to depend on this module
+      solutionOutputVariable: false
+  requirements:
+    roles:
+    - level: Project
+      roles:
+      - roles/compute.admin
+    services:
+    - compute.googleapis.com
