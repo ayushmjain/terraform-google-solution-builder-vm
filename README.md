@@ -18,11 +18,15 @@ To deploy this blueprint you must have an active billing account and billing per
 ## Documentation
 - [Compute Engine](https://cloud.google.com/compute/docs/instances)
 
+<!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 ## Inputs
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
 | env\_variables | Environment variables for GCE VMs | `map(string)` | `{}` | no |
+| health\_check\_name | Health check name for the GCE VMs Managed Instance Group | `string` | `""` | no |
+| health\_check\_port | Port where the health check request is sent | `number` | `80` | no |
+| health\_check\_request\_path | Path where the health check request is sent | `string` | `"/"` | no |
 | load\_balancer\_port | Port for load balancer to connect to the VM instances | `string` | `null` | no |
 | managed\_instance\_group\_name | Name of the managed instance group | `string` | n/a | yes |
 | network\_name | VPC network name where the GCE VMs are created | `string` | `"default"` | no |
@@ -36,8 +40,9 @@ To deploy this blueprint you must have an active billing account and billing per
 
 | Name | Description |
 |------|-------------|
+| health\_check\_link | Health check link |
 | load\_balancer\_port\_name | Port name for load balancer to connect to the VM instances |
-| managed\_instance\_group | Managed instance group |
+| managed\_instance\_group\_url | Managed instance group URL |
 | module\_dependency | Dependency variable that can be used by other modules to depend on this module |
 
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->

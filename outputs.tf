@@ -19,9 +19,14 @@ output "load_balancer_port_name" {
   value       = local.load_balancer_port_name
 }
 
-output "managed_instance_group" {
-  description = "Managed instance group"
-  value = module.mig
+output "managed_instance_group_url" {
+  value = module.mig.instance_group
+  description = "Managed instance group URL"
+}
+
+output "health_check_link" {
+  value = var.health_check_name != "" ? module.mig.health_check_self_links[0] : ""
+  description = "Health check link"
 }
 
 output "module_dependency" {

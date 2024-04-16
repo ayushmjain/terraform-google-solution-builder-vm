@@ -64,3 +64,21 @@ variable "load_balancer_port" {
   default = null
   description = "Port for load balancer to connect to the VM instances"
 }
+
+variable "health_check_name" {
+  type = string
+  default = ""
+  description = "Health check name for the GCE VMs Managed Instance Group"
+}
+
+variable "health_check_port" {
+  type = number
+  default = 80
+  description = "Port where the health check request is sent"
+}
+
+variable "health_check_request_path" {
+  type = string
+  default = "/"
+  description = "Path where the health check request is sent"
+}

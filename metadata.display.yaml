@@ -54,3 +54,12 @@ spec:
         vm_image:
           name: vm_image
           title: Vm Image
+        health_check_name:
+          name: health_check_name
+          title: Health Check Name
+        health_check_port:
+          name: health_check_port
+          title: Health Check Port
+        health_check_request_path:
+          name: health_check_request_path
+          title: Health Check Request Path

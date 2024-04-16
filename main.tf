@@ -55,6 +55,22 @@ module "mig" {
   region                    = var.region
   distribution_policy_zones = data.google_compute_zones.available.names
   autoscaling_enabled       = true
+  health_check_name = var.health_check_name
+  health_check = {
+    type                = var.health_check_name != "" ? "http" : ""
+    initial_delay_sec   = 30
+    check_interval_sec  = 30
+    healthy_threshold   = 1
+    timeout_sec         = 10
+    unhealthy_threshold = 5
+    response            = ""
+    proxy_header        = "NONE"
+    port                = var.health_check_port
+    request             = ""
+    request_path        = var.health_check_request_path
+    host                = ""
+    enable_logging      = false
+  }
   named_ports = var.load_balancer_port != null ? [
     {
       name = local.load_balancer_port_name

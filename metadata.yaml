@@ -96,6 +96,21 @@ spec:
       varType: string
       defaultValue: ""
       userInputVariable: true
+    - name: health_check_name
+      description: Health check name for the GCE VMs Managed Instance Group
+      varType: string
+      defaultValue: ""
+      userInputVariable: true
+    - name: health_check_port
+      description: Port where the health check request is sent
+      varType: number
+      defaultValue: 80
+      userInputVariable: true
+    - name: health_check_request_path
+      description: Path where the health check request is sent
+      varType: string
+      defaultValue: "/"
+      userInputVariable: true
     outputs:
     - name: load_balancer_port_name
       description: Port name for load balancer to connect to the VM instances
@@ -105,6 +120,12 @@ spec:
       solutionOutputVariable: false
     - name: module_dependency
       description: Dependency variable that can be used by other modules to depend on this module
+      solutionOutputVariable: false
+    - name: managed_instance_group_url
+      description: Managed instance group URL
+      solutionOutputVariable: false
+    - name: health_check_link
+      description: Health check link
       solutionOutputVariable: false
   requirements:
     roles:
