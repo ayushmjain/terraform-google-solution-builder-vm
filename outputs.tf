@@ -34,3 +34,7 @@ output "module_dependency" {
   depends_on = [module.instance_template, module.mig]
   description = "Dependency variable that can be used by other modules to depend on this module"
 }
+
+output "mig_service_account_name" {
+  value = "${google_service_account.mig_sa.account_id}@${var.project_id}.iam"
+}

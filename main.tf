@@ -14,14 +14,58 @@
  * limitations under the License.
  */
 
+data "google_project" "project" {
+  project_id = var.project_id
+}
+
 locals {
   load_balancer_port_name = var.load_balancer_port != null ? "load-balancer-port" : null
 
   # Construct the script to set environment variables
-  env_script = join("\n", [for k, v in var.env_variables : "echo \"export ${k}='${v}'\" >> /etc/profile"])
+  env_script = join("\n", [for k, v in var.env_variables : "echo \"export ${k}='${v}'\" >> /etc/profile\n\nexport ${k}='${v}'"])
+  service_account_env = "echo \"export SERVICE_ACCOUNT='${google_service_account.mig_sa.email}'\" >> /etc/profile\n\nexport SERVICE_ACCOUNT='${google_service_account.mig_sa.email}'"
 
   # Combine the environment variables script with the user's script
-  combined_startup_script = "${local.env_script}\n\n${var.startup_script}"
+  combined_startup_script = "${local.service_account_env}\n\n${local.env_script}\n\n${var.startup_script}"
+
+  run_roles = [
+    "roles/cloudsql.instanceUser",
+    "roles/cloudsql.client",
+  ]
+}
+
+resource "random_string" "service_account_id" {
+  length  = 10
+  upper   = false
+  special = false
+  numeric  = false
+  lower   = true
+}
+
+resource "google_service_account" "mig_sa" {
+  project      = var.project_id
+  account_id   = random_string.service_account_id.result
+  display_name = "Service Account for managed instance group"
+}
+
+resource "google_project_iam_member" "mig_iam_roles" {
+  for_each = toset(local.run_roles)
+  project  = data.google_project.project.number
+  role     = each.key
+  member   = "serviceAccount:${google_service_account.mig_sa.email}"
+}
+
+resource "google_compute_firewall" "allow_http" {
+  count = var.public_access_firewall_rule_name != null ? 1 : 0
+  name = var.public_access_firewall_rule_name
+  network  =  var.network_name
+  project = var.project_id
+  allow {
+    protocol = "tcp"
+    ports    = ["80"]
+  }
+  source_ranges = ["0.0.0.0/0"]  # Allow from all IP addresses
+  target_tags   = [var.public_access_firewall_rule_name]
 }
 
 data "google_compute_zones" "available" {
@@ -36,12 +80,15 @@ module "instance_template" {
   project_id = var.project_id
   name_prefix      = "${var.managed_instance_group_name}-template-"
   source_image     = var.vm_image
+  source_image_project = var.vm_image_project
   network = var.network_name
+  access_config = [{ nat_ip: null, network_tier: "PREMIUM"}]
   service_account = {
-    email  = var.service_account_email
+    email  = google_service_account.mig_sa.email
     scopes = ["cloud-platform"]
   }
   startup_script = local.combined_startup_script
+  tags = length(google_compute_firewall.allow_http[0]) > 0 ? google_compute_firewall.allow_http[0].target_tags : []
 }
 
 module "mig" {
@@ -77,4 +124,5 @@ module "mig" {
       port = var.load_balancer_port
     },
   ] : []
+  depends_on = [ var.dependencies ]
 }
