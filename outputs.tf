@@ -25,7 +25,7 @@ output "managed_instance_group_url" {
 }
 
 output "health_check_link" {
-  value = var.health_check_name != "" ? module.mig.health_check_self_links[0] : ""
+  value = var.health_check_name != "" ? module.mig.health_check_self_links[0] : null
   description = "Health check link"
 }
 
