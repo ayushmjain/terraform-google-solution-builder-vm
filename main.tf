@@ -22,8 +22,8 @@ locals {
   load_balancer_port_name = var.load_balancer_port != null ? "load-balancer-port" : null
 
   # Construct the script to set environment variables
-  env_script = join("\n", [for k, v in var.env_variables : "echo \"export ${k}='${v}'\" >> /etc/profile\n\nexport ${k}='${v}'"])
-  service_account_env = "echo \"export SERVICE_ACCOUNT='${google_service_account.mig_sa.email}'\" >> /etc/profile\n\nexport SERVICE_ACCOUNT='${google_service_account.mig_sa.email}'"
+  env_script = join("\n", [for k, v in var.env_variables : "echo \"export ${k}='${v}'\" >> /etc/profile\n\necho \"${k}=${v}\" >> /tmp/docker-env.txt"])
+  service_account_env = "echo \"export SERVICE_ACCOUNT='${google_service_account.mig_sa.email}'\" >> /etc/profile\n\necho \"SERVICE_ACCOUNT=${google_service_account.mig_sa.email}\" >> /tmp/docker-env.txt"
 
   # Combine the environment variables script with the user's script
   combined_startup_script = "${local.service_account_env}\n\n${local.env_script}\n\n${var.startup_script}"
@@ -31,6 +31,8 @@ locals {
   run_roles = [
     "roles/cloudsql.instanceUser",
     "roles/cloudsql.client",
+    "roles/storage.objectViewer",
+    "roles/artifactregistry.reader",
   ]
 }
 
