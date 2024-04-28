@@ -82,10 +82,6 @@ spec:
       varType: string
       required: true
       userInputVariable: true
-    - name: service_account_email
-      description: Email of the service account that should be attached to the GCE VMs
-      varType: string
-      userInputVariable: true
     - name: startup_script
       description: Startup script for GCE VMs
       varType: string
@@ -111,6 +107,25 @@ spec:
       varType: string
       defaultValue: "/"
       userInputVariable: true
+    - name: dependencies
+      description: Dependencies for the managed instance group
+      varType: list(any)
+      defaultValue: []
+      userInputVariable: false
+      connections:
+      - compositionUnitID: terraform-google-solution-builder-cloud-sql
+        type: list_merge
+        output: module_dependency
+    - name: vm_image_project
+      description: Project ID where VM image is present
+      varType: string
+      defaultValue: ""
+      userInputVariable: true
+    - name: public_access_firewall_rule_name
+      description: Name for the firewall rule to allow public access
+      varType: string
+      defaultValue: null
+      userInputVariable: true
     outputs:
     - name: load_balancer_port_name
       description: Port name for load balancer to connect to the VM instances
@@ -126,6 +141,9 @@ spec:
       solutionOutputVariable: false
     - name: health_check_link
       description: Health check link
+      solutionOutputVariable: false
+    - name: mig_service_account_name
+      description: Name for service account created for the MIG VMs. This can be used in other module for giving permission.
       solutionOutputVariable: false
   requirements:
     roles:

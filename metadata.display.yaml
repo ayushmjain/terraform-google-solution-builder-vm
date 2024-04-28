@@ -63,3 +63,12 @@ spec:
         health_check_request_path:
           name: health_check_request_path
           title: Health Check Request Path
+        dependencies:
+          name: dependencies
+          title: Dependencies
+        vm_image_project:
+          name: vm_image_project
+          title: Vm image project
+        public_access_firewall_rule_name:
+          name: public_access_firewall_rule_name
+          title: Firewall rule name for public access

@@ -80,7 +80,7 @@ variable "health_check_request_path" {
 variable "dependencies" {
   type = list(any)
   default = []
-  description = "Dependencies of the manages instance group"
+  description = "Dependencies for the managed instance group"
 }
 
 variable "vm_image_project" {
