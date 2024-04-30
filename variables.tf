@@ -41,12 +41,6 @@ variable "network_name" {
   description = "VPC network name where the GCE VMs are created"
 }
 
-variable "service_account_email" {
-  type = string
-  default = null
-  description = "Email of the service account that should be attached to the GCE VMs"
-}
-
 variable "env_variables" {
   type = map(string)
   default = {}
@@ -81,4 +75,22 @@ variable "health_check_request_path" {
   type = string
   default = "/"
   description = "Path where the health check request is sent"
+}
+
+variable "dependencies" {
+  type = list(any)
+  default = []
+  description = "Dependencies for the managed instance group"
+}
+
+variable "vm_image_project" {
+  description = "VM image project id"
+  default = ""
+  type = string
+}
+
+variable "public_access_firewall_rule_name" {
+  type = string
+  default = null
+  description = "Name of the firewall rule to allow public access"
 }
